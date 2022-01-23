@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import * as uuid from 'uuid';
 import { Order, OrderStatus } from './orders.interface';
 
@@ -6,6 +7,8 @@ const orders = new Map<Order['_id'], Order>();
 
 @Injectable()
 export class OrdersService {
+  constructor(@Inject('PUB_SUB') private pubsub: ClientProxy) {}
+
   healthCheck(): string {
     return 'Whats up, Its "orders"';
   }
@@ -22,6 +25,7 @@ export class OrdersService {
     };
 
     orders.set(newOrder._id, newOrder);
+    this.pubsub.emit('orders:created', newOrder);
 
     return newOrder;
   }
