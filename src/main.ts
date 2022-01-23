@@ -1,8 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { Transport } from '@nestjs/microservices';
+import { OrdersModule } from './orders-service/orders.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  // Orders
+  const ordersServer = await NestFactory.create(OrdersModule);
+  ordersServer.connectMicroservice({
+    transport: Transport.RMQ,
+  });
+  await ordersServer.startAllMicroservices();
+  await ordersServer.listen(3000);
 }
+
 bootstrap();
