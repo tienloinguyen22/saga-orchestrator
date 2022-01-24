@@ -1,9 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
+import { Order } from '../orders-service/orders.interface';
 import { CreateOrderSagaService } from './create-order-saga.service';
 
 @Controller('create-order-saga')
 export class CreateOrderSagaController {
+  private readonly logger = new Logger(CreateOrderSagaController.name);
+
   constructor(private createOrderSagaService: CreateOrderSagaService) {}
 
   @Get('/healthcheck')
@@ -12,10 +15,7 @@ export class CreateOrderSagaController {
   }
 
   @EventPattern('orders:created')
-  async startCreateOrderSaga(data: any) {
-    console.log(
-      '🚀 ~ file: create-order-saga.controller.ts ~ line 16 ~ CreateOrderSagaController ~ handleUserCreated ~ data',
-      data,
-    );
+  async startCreateOrderSaga(data: Order) {
+    this.logger.debug(`Event "orders:created" received`, data);
   }
 }
