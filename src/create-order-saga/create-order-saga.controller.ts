@@ -17,5 +17,15 @@ export class CreateOrderSagaController {
   @EventPattern('orders:created')
   async startCreateOrderSaga(data: Order) {
     this.logger.debug(`Event "orders:created" received`, data);
+
+    // Verify consumer (Consumer service)
+
+    // Create ticker (Kitchen service)
+
+    // Authorize card (Accounting service)
+
+    // Approve ticker (Kitchen service)
+
+    // Approve order (Order service)
   }
 }

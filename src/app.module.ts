@@ -3,15 +3,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { CreateOrderSagaModule } from './create-order-saga/create-order-saga.module';
 import { OrdersModule } from './orders-service/orders.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ClientsModule.register([{ name: 'PUB_SUB', transport: Transport.RMQ }]),
     OrdersModule,
     CreateOrderSagaModule,
+    UsersModule,
   ],
-  controllers: [],
-  providers: [AppController],
+  controllers: [AppController],
+  providers: [],
   exports: [],
 })
 export class AppModule {}
