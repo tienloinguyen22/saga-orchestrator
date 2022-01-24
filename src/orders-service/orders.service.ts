@@ -9,10 +9,6 @@ const orders = new Map<Order['_id'], Order>();
 export class OrdersService {
   constructor(@Inject('PUB_SUB') private pubsub: ClientProxy) {}
 
-  healthCheck(): string {
-    return 'Whats up, Its "orders"';
-  }
-
   async createOrder(
     userId: string,
     payload: Omit<Order, '_id' | 'userId' | 'status'>,

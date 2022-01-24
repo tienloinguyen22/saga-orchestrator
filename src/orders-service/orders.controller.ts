@@ -7,11 +7,6 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private ordersService: OrdersService) {}
 
-  @Get('/healthcheck')
-  healthCheck(): string {
-    return this.ordersService.healthCheck();
-  }
-
   @Post()
   createOrder(
     @Body() payload: Omit<Order, '_id' | 'userId' | 'status'>,
