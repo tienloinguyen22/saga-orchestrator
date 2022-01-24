@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { CreateOrderSagaModule } from './create-order-saga/create-order-saga.module';
 import { OrdersModule } from './orders-service/orders.module';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -11,6 +12,7 @@ import { UsersModule } from './users/users.module';
     OrdersModule,
     CreateOrderSagaModule,
     UsersModule,
+    RestaurantsModule,
   ],
   controllers: [AppController],
   providers: [],
