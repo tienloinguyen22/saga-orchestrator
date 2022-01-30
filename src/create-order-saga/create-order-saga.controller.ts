@@ -1,4 +1,4 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { Order } from '../orders-service/orders.interface';
 import { CreateOrderSagaService } from './create-order-saga.service';
@@ -9,22 +9,17 @@ export class CreateOrderSagaController {
 
   constructor(private createOrderSagaService: CreateOrderSagaService) {}
 
-  @Get('/healthcheck')
-  healthCheck(): string {
-    return this.createOrderSagaService.healthCheck();
-  }
-
   @EventPattern('orders:created')
   async startCreateOrderSaga(data: Order) {
     this.logger.debug(`Event "orders:created" received`, data);
 
     // Verify consumer (Consumer service)
 
-    // Create ticker (Kitchen service)
+    // Create ticket (Restaurant service)
 
-    // Authorize card (Accounting service)
+    // Authorize card (Payment service)
 
-    // Approve ticker (Kitchen service)
+    // Approve ticket (Restaurant service)
 
     // Approve order (Order service)
   }
