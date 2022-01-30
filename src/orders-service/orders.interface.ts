@@ -27,3 +27,8 @@ export class CreateOrderPayload {
   @IsNumber()
   total: number;
 }
+
+export class ApproveOrderPayload {
+  @IsString()
+  orderId: string;
+}

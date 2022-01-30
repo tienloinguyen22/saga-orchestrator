@@ -2,7 +2,8 @@ import { IsString, IsArray, ArrayNotEmpty } from 'class-validator';
 
 export enum TicketStatus {
   PENDING = 'pending',
-  CONFIRMED = 'confirmed',
+  PREPARING = 'preparing',
+  FINISHED = 'finished',
 }
 
 export type Ticket = {
@@ -19,4 +20,9 @@ export class CreateTicketPayload {
   @IsArray()
   @ArrayNotEmpty()
   items: string[];
+}
+
+export class ApproveTicketPayload {
+  @IsString()
+  ticketId: string;
 }

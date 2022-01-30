@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as uuid from 'uuid';
 import {
+  ApproveTicketPayload,
   CreateTicketPayload,
   Ticket,
   TicketStatus,
@@ -18,5 +19,20 @@ export class RestaurantsService {
     };
     tickets.set(newTicket._id, newTicket);
     return newTicket;
+  }
+
+  async approveTicket(data: ApproveTicketPayload): Promise<Ticket> {
+    const existedTicket = tickets.get(data.ticketId);
+    if (!existedTicket) {
+      throw new Error(`Ticket ${data.ticketId} not found`);
+    }
+
+    const updatedTicket = {
+      ...existedTicket,
+      status: TicketStatus.PREPARING,
+    };
+    tickets.set(existedTicket._id, updatedTicket);
+
+    return updatedTicket;
   }
 }

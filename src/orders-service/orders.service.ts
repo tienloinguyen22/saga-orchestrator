@@ -1,7 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import * as uuid from 'uuid';
-import { CreateOrderPayload, Order, OrderStatus } from './orders.interface';
+import {
+  ApproveOrderPayload,
+  CreateOrderPayload,
+  Order,
+  OrderStatus,
+} from './orders.interface';
 
 const orders = new Map<Order['_id'], Order>();
 
@@ -24,5 +29,20 @@ export class OrdersService {
     this.pubsub.emit('orders:created', newOrder);
 
     return newOrder;
+  }
+
+  async approveOrder(payload: ApproveOrderPayload): Promise<Order> {
+    const existedOrder = orders.get(payload.orderId);
+    if (!existedOrder) {
+      throw new Error(`Order ${payload.orderId} not found`);
+    }
+
+    const updatedOrder = {
+      ...existedOrder,
+      status: OrderStatus.PREPARING,
+    };
+    orders.set(payload.orderId, updatedOrder);
+
+    return updatedOrder;
   }
 }
