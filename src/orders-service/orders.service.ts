@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import * as uuid from 'uuid';
 import {
-  ApproveOrderPayload,
+  ChangeOrderStatusPayload,
   CreateOrderPayload,
   Order,
   OrderStatus,
@@ -12,7 +12,9 @@ const orders = new Map<Order['_id'], Order>();
 
 @Injectable()
 export class OrdersService {
-  constructor(@Inject('PUB_SUB') private pubsub: ClientProxy) {}
+  private readonly logger = new Logger(OrdersService.name);
+
+  constructor(@Inject('rmq') private rmqClientProxy: ClientProxy) {}
 
   async createOrder(
     userId: string,
@@ -26,12 +28,12 @@ export class OrdersService {
     };
 
     orders.set(newOrder._id, newOrder);
-    this.pubsub.emit('orders:created', newOrder);
+    this.rmqClientProxy.emit('orders:created', newOrder);
 
     return newOrder;
   }
 
-  async approveOrder(payload: ApproveOrderPayload): Promise<Order> {
+  async approveOrder(payload: ChangeOrderStatusPayload): Promise<Order> {
     const existedOrder = orders.get(payload.orderId);
     if (!existedOrder) {
       throw new Error(`Order ${payload.orderId} not found`);
@@ -42,6 +44,27 @@ export class OrdersService {
       status: OrderStatus.PREPARING,
     };
     orders.set(payload.orderId, updatedOrder);
+
+    return updatedOrder;
+  }
+
+  async rejectOrder(payload: ChangeOrderStatusPayload): Promise<Order> {
+    const existedOrder = orders.get(payload.orderId);
+    if (!existedOrder) {
+      throw new Error(`Order ${payload.orderId} not found`);
+    }
+
+    const updatedOrder = {
+      ...existedOrder,
+      status: OrderStatus.REJECTED,
+    };
+    orders.set(payload.orderId, updatedOrder);
+
+    this.logger.debug(
+      `Reject order ${payload.orderId} with msg: ${
+        payload.rejectMsg || 'Unknown'
+      }`,
+    );
 
     return updatedOrder;
   }

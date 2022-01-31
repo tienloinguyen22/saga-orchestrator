@@ -13,14 +13,6 @@ export class CreateOrderSagaController {
   async startCreateOrderSaga(data: Order) {
     this.logger.debug(`Event "orders:created" received`, data);
 
-    // Verify consumer (Consumer service)
-
-    // Create ticket (Restaurant service)
-
-    // Authorize card (Payment service)
-
-    // Approve ticket (Restaurant service)
-
-    // Approve order (Order service)
+    return this.createOrderSagaService.runCreateOrderSaga(data);
   }
 }

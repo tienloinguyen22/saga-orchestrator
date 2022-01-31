@@ -1,7 +1,7 @@
 import { Body, Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import {
-  ApproveTicketPayload,
+  UpdateTicketStatusPayload,
   CreateTicketPayload,
   Ticket,
 } from './restaurants.interface';
@@ -17,7 +17,12 @@ export class RestaurantsController {
   }
 
   @MessagePattern({ req: 'tickets:approve' })
-  approveTicket(@Body() payload: ApproveTicketPayload): Promise<Ticket> {
+  approveTicket(@Body() payload: UpdateTicketStatusPayload): Promise<Ticket> {
     return this.restaurantsService.approveTicket(payload);
+  }
+
+  @MessagePattern({ req: 'tickets:reject' })
+  rejectTicket(@Body() payload: UpdateTicketStatusPayload): Promise<Ticket> {
+    return this.restaurantsService.rejectTicket(payload);
   }
 }

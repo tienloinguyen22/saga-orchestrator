@@ -5,7 +5,7 @@ import { OrdersService } from './orders.service';
 
 @Module({
   imports: [
-    ClientsModule.register([{ name: 'PUB_SUB', transport: Transport.RMQ }]),
+    ClientsModule.register([{ name: 'rmq', transport: Transport.RMQ }]),
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

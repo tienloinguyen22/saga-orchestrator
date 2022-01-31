@@ -9,7 +9,7 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ClientsModule.register([{ name: 'PUB_SUB', transport: Transport.RMQ }]),
+    ClientsModule.register([{ name: 'rmq', transport: Transport.RMQ }]),
     OrdersModule,
     CreateOrderSagaModule,
     UsersModule,

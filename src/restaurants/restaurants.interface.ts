@@ -4,6 +4,7 @@ export enum TicketStatus {
   PENDING = 'pending',
   PREPARING = 'preparing',
   FINISHED = 'finished',
+  REJECTED = 'rejected',
 }
 
 export type Ticket = {
@@ -22,7 +23,7 @@ export class CreateTicketPayload {
   items: string[];
 }
 
-export class ApproveTicketPayload {
+export class UpdateTicketStatusPayload {
   @IsString()
   ticketId: string;
 }

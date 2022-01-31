@@ -5,6 +5,7 @@ export enum OrderStatus {
   PREPARING = 'preparing',
   DELIVERING = 'delivering',
   COMPLETED = 'completed',
+  REJECTED = 'rejected',
 }
 
 export type Order = {
@@ -14,6 +15,7 @@ export type Order = {
   items: string[];
   status: OrderStatus;
   total: number;
+  cardId: string;
 };
 
 export class CreateOrderPayload {
@@ -26,9 +28,15 @@ export class CreateOrderPayload {
 
   @IsNumber()
   total: number;
+
+  @IsString()
+  cardId: string;
 }
 
-export class ApproveOrderPayload {
+export class ChangeOrderStatusPayload {
   @IsString()
   orderId: string;
+
+  @IsString()
+  rejectMsg?: string;
 }

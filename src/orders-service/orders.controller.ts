@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import * as uuid from 'uuid';
 import {
-  ApproveOrderPayload,
+  ChangeOrderStatusPayload,
   CreateOrderPayload,
   Order,
 } from './orders.interface';
@@ -19,7 +19,12 @@ export class OrdersController {
   }
 
   @MessagePattern({ req: 'orders:approve' })
-  approveOrder(@Body() payload: ApproveOrderPayload): Promise<Order> {
+  approveOrder(@Body() payload: ChangeOrderStatusPayload): Promise<Order> {
     return this.ordersService.approveOrder(payload);
+  }
+
+  @MessagePattern({ req: 'orders:reject' })
+  rejectOrder(@Body() payload: ChangeOrderStatusPayload): Promise<Order> {
+    return this.ordersService.rejectOrder(payload);
   }
 }
